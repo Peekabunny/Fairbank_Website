@@ -1,32 +1,15 @@
-const express = require('express');    // type module calling
-const Router = require("./routes/Routes.js")
+import express from "express";
+import notesRoutes from "./routes/notesRoutes.js"
 
-const app = express(); // calling express
-const port = 3000;
+const app = express();
+const PORT = 5001;
 
-
-
-// Middleware to parse JSON
-app.use(express.json());
-app.use(XPathExpression.url)
-
-// Rest API using HTTP method      get, post, put , delete
-
-async function connectDB(){
-
-}
+app.use("/api/notes", notesRoutes);
 
 
+app.use(express.json()); // this middleware will parse JSON bodies: req.body
 
-// Example route (basic api)
-app.get('/', (req, res) => {
-  res.send('hello from the server!');
+
+app.listen(5001, () => {
+  console.log("Server starting on Port: 5001");
 });
-
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
-
-
-connectDB();
