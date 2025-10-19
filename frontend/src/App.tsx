@@ -3,9 +3,6 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-
-// Main React component " home page"
-
 function App() {
   const [count, setCount] = useState(0)
 
