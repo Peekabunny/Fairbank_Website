@@ -4,15 +4,21 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
-import notesRoutes from "./routes/notesRoutes.js"
+import sessionRoutes from "./routes/sessionRoutes.js";
+import userRoutes from "./routes/user.js"
+
 import {connectDB} from "./config/db.js"
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 
+
+// loads the .env file
 dotenv.config();
 
 // console.log(process.env.MONGO_URI);
 
+
+// create server and the port number the server is listening on
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -20,8 +26,10 @@ const PORT = process.env.PORT || 5001;
 // middleware
 app.use(express.json()); // parse JSON bodies: req.body
 
-app.use(rateLimiter);
+app.use(rateLimiter); // limit the number of request
 
+
+// logs incoming request from 
 app.use((req, res, next) => {
   console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
   next();
@@ -31,8 +39,10 @@ app.use((req, res, next) => {
 
 
 
-// Mount the notes routes under the /api/notes endpoint
-app.use("/api/notes", notesRoutes);
+// Mount the routes under the /api/ endpoint
+app.use("/api/sessions", sessionRoutes);
+app.use("/api/user", userRoutes);
+
 
 
 

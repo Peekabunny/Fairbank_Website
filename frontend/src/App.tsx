@@ -1,23 +1,54 @@
-import React from 'react'
-import { Route, Routes } from 'react-router'
-import HomePage from './pages/HomePage'
-import Createpage from './pages/Createpage'
-import NoteDetailPage from './pages/NoteDetailPage'
-import toast from 'react-hot-toast'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuthContext } from './hooks/useAuthContext';
+
+// pages & components
+import Home from './pages/HomePage';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Navbar from './components/Navbar';
+
+import { SessionsContextProvider } from './context/SessionContext';
 
 const App = () => {
+  const { user } = useAuthContext();
+
   return (
-    <div>
-      <button onClick={()=> toast.success("Yay")} className='text-red-500 p-4'>click me</button>
-      <Routes>
-        <Route path="/" element={<HomePage />}> </Route>
-        <Route path="/create" element={<Createpage />}> </Route>
-        <Route path="/note/:id" element={<NoteDetailPage />}> </Route>
-      </Routes>
+    <div className="App">
+      <Navbar />
+      <div className="pages">
+        <Routes>
+          {/* Always redirect root to /login */}
+          <Route path="/" element={<Navigate to="/login" />} />
 
+          {/* Login Page */}
+          <Route 
+            path="/login" 
+            element={!user ? <Login /> : <Navigate to="/home" />} 
+          />
 
+          {/* Signup Page */}
+          <Route 
+            path="/signup" 
+            element={!user ? <Signup /> : <Navigate to="/home" />} 
+          />
+
+          {/* Protected Home Page */}
+          <Route 
+            path="/home" 
+            element={
+              user ? (
+                <SessionsContextProvider>
+                  <Home />
+                </SessionsContextProvider>
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
+          />
+        </Routes>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
